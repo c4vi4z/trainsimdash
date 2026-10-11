@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import requests
+import time
+import sys
 from pathlib import Path
 
 path = Path(input("Insert path to API Key (including the .txt): ").strip().strip('"')).expanduser()
@@ -10,9 +12,16 @@ key = path.read_text().strip()
 if len(key) == 44:
     print("good key, thank", key)
 else:
-    print("wrong key buddy lol hhahahahaha")
+    sys.exit("exit time, wrong stuff")
 
 # now define header and test if connection is 200, if not print line
+headers = {"DTGCommKey": key}
+base = "http://localhost:31270"
+
+r = requests.get(f"{base}/list", headers=headers, timeout=5)
+if r.status_code != 200: sys.exit(f"bad status {r.status_code}")
+
+print("yay it runs")
 
 # define which data we want (ie what endpoints we're gonna track per tick)
 
