@@ -7,7 +7,10 @@ path = Path(input("Insert path to API Key (including the .txt): ").strip().strip
 key = path.read_text().strip()
 
 # make sure this is actually an api key
-print(key)
+if len(key) == 44:
+    print("good key, thank", key)
+else:
+    print("wrong key buddy lol hhahahahaha")
 
 # now define header and test if connection is 200, if not print line
 
