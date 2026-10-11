@@ -19,14 +19,13 @@ headers = {"DTGCommKey": key}
 base = "http://localhost:31270"
 
 r = requests.get(f"{base}/list", headers=headers, timeout=5)
-if r.status_code != 200: sys.exit(f"bad status {r.status_code}")
+if r.status_code != 200: sys.exit("client not up")
 
 print("yay it runs")
 
-# define which data we want (ie what endpoints we're gonna track per tick)
+# ok right here in this part we define which data we want (i.e. what endpoints we're gonna track per tick)
 
 # use a sleep timer for like once every half second so it doesnt lag too bad
-
 
 # check throttle/brake value.
 
