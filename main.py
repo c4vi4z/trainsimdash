@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
-import requests
-import time
 import sys
+import time
 from pathlib import Path
+
+import requests
+
+# fuck sorting bro who designed this
 
 path = Path(input("Insert path to API Key (including the .txt): ").strip().strip('"')).expanduser()
 key = path.read_text().strip()
