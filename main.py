@@ -24,13 +24,14 @@ else: sys.exit("client not up")
 
 # ok right here in this part we define which data we want (i.e. what endpoints we're gonna track per tick)
 # and use a sleep timer for like once every half second so it doesnt lag too bad
-endpoints = ["CurrentDrivableActor.Function.HUD_GetSpeed", "CurrentDrivableActor.Function.HUD_GetAcceleration"]
+endpoints = ["CurrentDrivableActor.Function.HUD_GetSpeed", "CurrentDrivableActor.Function.HUD_GetAcceleration", "CurrentDrivableActor.Function.IS_GetVehicleInfo, "]
 
 while True:
     for endpoint in endpoints:
         r = requests.get(f"{base}/get/{endpoint}", headers=headers)
         print(endpoint, r.text)
-        time.sleep(0.5)
+
+    time.sleep(0.5)
 
 # check throttle/brake value.
 #
