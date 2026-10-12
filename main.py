@@ -24,7 +24,7 @@ else: sys.exit("client not up")
 
 # ok right here in this part we define which data we want (i.e. what endpoints we're gonna track per tick)
 # and use a sleep timer for like once every half second so it doesnt lag too bad
-endpoints = ["CurrentDrivableActor.Function.HUD_GetSpeed", "CurrentDrivableActor.Function.HUD_GetAcceleration", "CurrentDrivableActor.Function.IS_GetVehicleInfo, "]
+endpoints = ["CurrentDrivableActor.Function.HUD_GetSpeed", "CurrentDrivableActor.Function.HUD_GetAcceleration", "CurrentDrivableActor.Function.IS_GetVehicleInfo", "DriverAid.Data"]
 
 while True:
     for endpoint in endpoints:
