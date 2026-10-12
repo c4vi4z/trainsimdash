@@ -24,21 +24,22 @@ else: sys.exit("client not up")
 
 # ok right here in this part we define which data we want (i.e. what endpoints we're gonna track per tick)
 # and use a sleep timer for like once every half second so it doesnt lag too bad
-endpoint = "CurrentDrivableActor.Function.HUD_GetSpeed"
+endpoints = ["CurrentDrivableActor.Function.HUD_GetSpeed", "CurrentDrivableActor.Function.HUD_GetAcceleration"]
 
 while True:
-    r = requests.get(f"{base}/get/{endpoint}", headers=headers, timeout=5)
-    print(r.text)
-    time.sleep(0.5)
+    for endpoint in endpoints:
+        r = requests.get(f"{base}/get/{endpoint}", headers=headers)
+        print(endpoint, r.text)
+        time.sleep(0.5)
 
 # check throttle/brake value.
+#
 
 # estimate acceleration based on previous tick, if previous tick was higher than
 # the tick before that,
 # it's acceleration. if not, neither, if brake, deceleration, then print line.
 
-# also check if AWS is an exposed endpoint. it probably is but i lowkey dont wanna start
-# up tsw rn
+# check AWS or other warning stuff here, it is indeed exposed.
 
 # print warning line if aws shits itself
 
@@ -50,4 +51,4 @@ while True:
 
 # some stuff should be checked on stop, so when speed = 0, check next station every 0.5 seconds.
 
-# check weather only after sitting down, though we should add some other logic to this as well.
+# check weather
