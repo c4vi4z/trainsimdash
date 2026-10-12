@@ -37,11 +37,8 @@ while True:
     time.sleep(0.5)
 
 # check throttle/brake value.
-#
 
-# estimate acceleration based on previous tick, if previous tick was higher than
-# the tick before that,
-# it's acceleration. if not, neither, if brake, deceleration, then print line.
+#acceleration
 
 # check AWS or other warning stuff here, it is indeed exposed.
 
