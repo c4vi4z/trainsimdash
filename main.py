@@ -27,17 +27,34 @@ else: sys.exit("client not up")
 
 # ok right here in this part we define which data we want (i.e. what endpoints we're gonna track per tick)
 # and use a sleep timer for like once every half second so it doesnt lag too bad
-endpoints = ["CurrentDrivableActor.Function.HUD_GetSpeed", "CurrentDrivableActor.Function.HUD_GetAcceleration", "CurrentDrivableActor.Function.IS_GetVehicleInfo", "DriverAid.Data"]
-
-while True:
-    for endpoint in endpoints:
-        r = requests.get(f"{base}/get/{endpoint}", headers=headers)
-        print(endpoint, r.text)
-
-    time.sleep(0.5)
 
 # check throttle/brake value.
+fast = {
+    "speed": "CurrentDrivableActor.Function.HUD_GetSpeed",
+    "acceleration": "CurrentDrivableActor.Function.HUD_GetAcceleration",
+    "driverdata": "DriverAid.Data",
+ }
 
+slow = {
+     "vehicleinfo": "CurrentDrivableActor.Function.IS_GetVehicleInfo",
+ }
+
+def get(path):
+    r = requests.get(f"{base}/get/{path}", headers=headers, timeout=2)
+    return r.text
+
+tick = 0
+while True:
+    for name, path in fast.items():
+        print(name, get (path))
+
+        if tick % 40 == 0:
+            for name, path in slow.items():
+               print(name, get(path))
+
+
+    tick += 1
+    time.sleep(0.5)
 #acceleration
 
 # check AWS or other warning stuff here, it is indeed exposed.
