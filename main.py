@@ -29,31 +29,34 @@ else: sys.exit("client not up")
 # and use a sleep timer for like once every half second so it doesnt lag too bad
 
 # check throttle/brake value.
-fast = {
-    "speed": "CurrentDrivableActor.Function.HUD_GetSpeed",
-    "acceleration": "CurrentDrivableActor.Function.HUD_GetAcceleration",
-    "driverdata": "DriverAid.Data",
- }
+def get(endpoint):
+    r = requests.get(f"{base}/get/{endpoint}", headers=headers, timeout=2)
+    return r.json()["Values"]
 
-slow = {
-     "vehicleinfo": "CurrentDrivableActor.Function.IS_GetVehicleInfo",
- }
+# read the loco name once at the start
+info = get("CurrentDrivableActor.Function.IS_GetVehicleInfo")["Output"]
+for k, v in info.items():
+    if k.startswith("class_"):
+        print("loco:", v)
 
-def get(path):
-    r = requests.get(f"{base}/get/{path}", headers=headers, timeout=2)
-    return r.text
-
-tick = 0
 while True:
-    for name, path in fast.items():
-        print(name, get (path))
+    speed = get("CurrentDrivableActor.Function.HUD_GetSpeed")["Speed (ms)"]
+    accel = get("CurrentDrivableActor.Function.HUD_GetAcceleration")["Acceleration (ms2)"]
+    aid = get("DriverAid.Data")
 
-        if tick % 40 == 0:
-            for name, path in slow.items():
-               print(name, get(path))
+    if accel > 0.05:
+        state = "ACCEL"
+    elif accel < -0.05:
+        state = "DECEL"
+    else:
+        state = "COAST"
 
+    limit = aid["speedLimit"]["value"]
+    signal = aid["signalAspectClass"]
+    signal_dist = aid["distanceToSignal"] / 100
 
-    tick += 1
+    print(f"{speed * 3.6:5.1f} km/h  limit {limit * 3.6:3.0f}  {state:5}  signal {signal} in {signal_dist:5.0f} m")
+
     time.sleep(0.5)
 #acceleration
 
