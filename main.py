@@ -40,6 +40,16 @@ while True:
     speed = get("CurrentDrivableActor.Function.HUD_GetSpeed")["Speed (ms)"]
     accel = get("CurrentDrivableActor.Function.HUD_GetAcceleration")["Acceleration (ms2)"]
     aid = get("DriverAid.Data")
+    handle = get("CurrentDrivableActor.Function.HUD_GetPowerHandle")
+#    brake = get("CurrentDrivableActor.Function.HUD_GetTrainBrakeHandle")
+    emergency = get("CurrentDrivableActor.Function.GetEmergencyBrakeState")
+    tractionlock = get("CurrentDrivableActor.Function.IS_GetTractionLock")
+
+    power = handle["Power"]
+    if handle["IsNegative"]:
+        power = -power
+
+    throttle = round(power) * 10
 
     if accel > 0.05:
         state = "ACCEL"
@@ -48,10 +58,26 @@ while True:
     else:
         state = "COAST"
 
+    if emergency["bEmergencyBrakeState"]:
+        emergency = "EMERGENCY"
+    else:
+        emergency = ""
+
+    if tractionlock["IsTractionLocked"]:
+        traction = "LOCK"
+    else:
+        traction = ""
+
     limit = aid["speedLimit"]["value"]
     signal = aid["signalAspectClass"]
     signal_dist = aid["distanceToSignal"] / 100
 
-    print(f"{speed * 3.6:5.1f} km/h  limit {limit * 3.6:3.0f}  {state:5}  signal {signal} in {signal_dist:5.0f} m")
+    if speed >= limit:
+        speed_warning = "SPEEDING"
+    else:
+        speed_warning = ""
+
+# add brake {brake['HandlePosition']} or traction {tractionlock}
+    print(f"{speed * 3.6:5.1f} km/h  limit {limit * 3.6:3.0f}  {state:5}  handle {throttle:+4d}%  signal {signal} in {signal_dist:5.0f} m {speed_warning}  {emergency} {traction}")
 
     time.sleep(0.5)
