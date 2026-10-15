@@ -48,7 +48,6 @@ while True:
     power = handle["Power"]
     if handle["IsNegative"]:
         power = -power
-
     throttle = round(power) * 10
 
     if accel > 0.05:
@@ -58,10 +57,7 @@ while True:
     else:
         state = "COAST"
 
-    if emergency["bEmergencyBrakeState"]:
-        emergency = "EMERGENCY"
-    else:
-        emergency = ""
+    emerg = "EMERGENCY" if emergency["bEmergencyBrakeState"] else ""
 
     if tractionlock["IsTractionLocked"] and state != "DECEL":
         traction = "LOCK"
@@ -78,6 +74,6 @@ while True:
         speed_warning = ""
 
 # add brake with {brake['HandlePosition']}
-    print(f"{speed * 3.6:5.1f} km/h  limit {limit * 3.6:3.0f}  {state:5}  handle {throttle:+4d}%  signal {signal} in {signal_dist:5.0f} m {speed_warning}  {emergency} {traction}")
+    print(f"{speed * 3.6:5.1f} km/h  limit {limit * 3.6:3.0f}  {state:5}  handle {throttle:+4d}%  signal {signal} in {signal_dist:5.0f} m {speed_warning}  {emerg} {traction}")
 
     time.sleep(0.5)
