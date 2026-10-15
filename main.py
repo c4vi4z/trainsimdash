@@ -63,7 +63,7 @@ while True:
     else:
         emergency = ""
 
-    if tractionlock["IsTractionLocked"]:
+    if tractionlock["IsTractionLocked"] and state != "DECEL":
         traction = "LOCK"
     else:
         traction = ""
@@ -77,7 +77,7 @@ while True:
     else:
         speed_warning = ""
 
-# add brake {brake['HandlePosition']} or traction {tractionlock}
+# add brake with {brake['HandlePosition']}
     print(f"{speed * 3.6:5.1f} km/h  limit {limit * 3.6:3.0f}  {state:5}  handle {throttle:+4d}%  signal {signal} in {signal_dist:5.0f} m {speed_warning}  {emergency} {traction}")
 
     time.sleep(0.5)
