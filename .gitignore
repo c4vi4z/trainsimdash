@@ -1,3 +1,4 @@
 .venv/
 CommAPIKey.txt
 __pycache__/
+config.json
